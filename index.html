@@ -275,29 +275,15 @@
     @keyframes openCover{ from{ transform: rotateY(0) translateZ(8px) } to{ transform: rotateY(-160deg) translateZ(8px) } }
     @keyframes fadeInUp{ from{ opacity:0; transform: translateY(6px) } to{ opacity:1; transform: translateY(0) } }
 
-    /* ============ RESPONSIVE ============ */
-@media (max-width: 900px) {
-    .layout {
-        flex-direction: column-reverse; /* Đảo ngược: Sách (right) lên trên, Hoa (left) xuống dưới */
+      /* ============ RESPONSIVE ============ */
+    @media (max-width: 900px){
+      .layout{ flex-direction:column; }
+      .left-pane, .right-pane{ width:100vw; }
+      .left-pane{ height:56vh; }
+      .right-pane{ height:44vh; padding:14px; }
+      .book-scene{ height:60vh; }
+      .heading{ left:14px; top:12px; }
     }
-    .left-pane, .right-pane {
-        width: 100vw; /* Chiếm toàn bộ chiều ngang */
-    }
-    .left-pane {
-        height: 60vh; /* Hoa (dưới) chiếm 60% */
-    }
-    .right-pane {
-        height: 40vh; /* Sách (trên) chiếm 40% */
-        padding: 14px;
-    }
-    .book-scene {
-        height: 100%; /* Quan trọng: Cho cuốn sách vừa khít 40% khung trên */
-    }
-    .heading {
-        left: 14px;
-        top: 12px;
-    }
-}
 
     /* ===== MODAL NHẬP TÊN ===== */
     .modal-backdrop{ position:fixed; inset:0; background:rgba(0,0,0,.35); display:none; align-items:center; justify-content:center; z-index:1100; }
@@ -761,4 +747,5 @@ audioBtn.addEventListener('click', () => {
     })();
   </script>
 </body>
+
 </html>
