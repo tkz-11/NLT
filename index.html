@@ -86,7 +86,7 @@
     .paper-left{ left:0; transform-origin:bottom right; animation:wrapLeft 1.5s ease-out .5s forwards; }
     .paper-right{ right:5; transform-origin:bottom left; animation:wrapRight 1.5s ease-out .5s forwards; }
 
-    #bouquet{ position:absolute; inset:0; z-index:10; left:150px; }
+    #bouquet{ position:absolute; inset:0; z-index:10; left: calc(72% - 365px); }
     .sunflower{ position:absolute; bottom:0; transform-origin:bottom center; }
 
     .stem{ width:12px; height:0; position:absolute; left:50%; bottom:0; transform:translateX(-50%); transform-origin:bottom center; }
@@ -275,7 +275,7 @@
     @keyframes openCover{ from{ transform: rotateY(0) translateZ(8px) } to{ transform: rotateY(-160deg) translateZ(8px) } }
     @keyframes fadeInUp{ from{ opacity:0; transform: translateY(6px) } to{ opacity:1; transform: translateY(0) } }
 
-      /* ============ RESPONSIVE ============ */
+/* ============ RESPONSIVE ============ */
 @media (max-width: 900px) {
     .layout {
         flex-direction: column-reverse; /* Đảo ngược: Sách (right) lên trên, Hoa (left) xuống dưới */
@@ -284,12 +284,13 @@
         width: 100vw; /* Chiếm toàn bộ chiều ngang */
     }
     .left-pane {
-        height: 60vh; /* Hoa (dưới) chiếm 60% */
+        height: 50vh; /* Hoa (dưới) chiếm 60% */
     }
     .right-pane {
-        height: 40vh; /* Sách (trên) chiếm 40% */
+        height: 50vh; /* Sách (trên) chiếm 40% */
         padding: 14px;
     }
+    
     .book-scene {
         height: 100%; /* Quan trọng: Cho cuốn sách vừa khít 40% khung trên */
     }
@@ -297,6 +298,24 @@
         left: 14px;
         top: 12px;
     }
+    .ribbon {
+    top: 12px;         /* Dịch lên (giá trị gốc là 18px) */
+    left: 12px;        /* Dịch sang trái (giá trị gốc là 18px) */
+    padding: 6px 10px; /* Thu nhỏ (giá trị gốc là 8px 14px) */
+    font-size: 13px;   /* Giảm cỡ chữ 1 chút */
+}
+.page-right {padding: 8px 20px 15px 20px;}
+
+.wrapper-paper {
+       left: 50%;
+       transform: translateX(-41.5%) scale(0.4) translateY(400px);
+   }
+
+   #bouquet {
+       left:29%;
+       transform: translateX(-105px) scale(0.4) translateY(30px);
+       transform-origin: center bottom;
+   }
 }
 
     /* ===== MODAL NHẬP TÊN ===== */
@@ -325,44 +344,9 @@
     .btn-secondary{ background:#fff; border:1px solid #eadcc7; }
 
 
-  /* ============ MÀN HÌNH CHẶN XOAY DỌC ============ */
-#rotate-blocker {
-    position: fixed;
-    inset: 0;
-    background: var(--bg1);
-    color: var(--ink);
-    z-index: 9999;
-    display: none; /* Mặc định ẩn */
-    align-items: center;
-    justify-content: center;
-    text-align: center;
-    font-size: 16px;
-    line-height: 1.6;
-}
-
-/* Chỉ hiển thị màn hình chặn khi ở màn hình dọc & là mobile */
-@media (orientation: portrait) and (max-width: 900px) {
-    #rotate-blocker {
-        display: flex; /* Hiện màn hình chặn */
-    }
-    .layout, .audio-fab, .modal-backdrop {
-        display: none !important; /* Ẩn toàn bộ nội dung chính và pop-up */
-    }
-}
-
-
   </style>
 </head>
 <body>
-
-  <div id="rotate-blocker">
-    <div>
-        <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="currentColor" style="margin-bottom: 16px;">
-            <path d="M16.899 15.101A5.002 5.002 0 0 0 17 12c0-2.757-2.243-5-5-5S7 9.243 7 12s2.243 5 5 5a4.98 4.98 0 0 0 3.101-.9l3.793 3.793a1 1 0 0 0 1.414-1.414l-3.41-3.41zM12 15a3 3 0 1 1 0-6 3 3 0 0 1 0 6zM20.945 8.384a1 1 0 0 0-1.32-.082l-2.001 1.368A7.94 7.94 0 0 0 12 7a8 8 0 1 0 7.938 9.387 1 1 0 1 0-1.875-.68A6 6 0 1 1 12 9a5.94 5.94 0 0 1 4.223 1.93l-2.16 1.474a1 1 0 0 0 .58 1.815l4.945 1.101A.998.998 0 0 0 20.945 8.384z"></path>
-        </svg>
-        <p>Xoay ngang điện thoại của bạn<br>để xem trang này.</p>
-    </div>
-</div>
 
   <div class="layout">
     <!-- BÊN TRÁI: HOA -->
@@ -504,7 +488,12 @@
       flower.appendChild(flowerHead);
       bouquet.appendChild(flower);
 
-      setTimeout(() => { startParticles(config.left + 150, canvas.height - config.stemHeight - 50); }, 2000);
+      const x_offset = config.left + 40; // Tọa độ X tương đối so với bó hoa
+      const y_height_from_bottom = config.stemHeight + 50; // Chiều cao Y tính từ đáy
+      
+      setTimeout(() => { 
+        startParticles(x_offset, y_height_from_bottom); 
+      }, 2000);
     }
 
     const babyPositions = [
@@ -542,7 +531,29 @@
       draw(){ ctx.save(); ctx.translate(this.x,this.y); ctx.rotate(this.rotation*Math.PI/180); ctx.globalAlpha=this.opacity; ctx.fillStyle='#ffd93d'; ctx.beginPath(); ctx.ellipse(0,0,this.size,this.size*1.5,0,0,Math.PI*2); ctx.fill(); ctx.restore(); }
     }
 
-    function startParticles(x,y){ setInterval(()=>{ for(let i=0;i<3;i++){ particles.push(new Particle(x,y)); } },200); }
+  /* ================================================================ */
+/* ===== CODE HOÀN CHỈNH (GỘP CẢ 2 TÍNH NĂNG) ===== */
+
+function startParticles(x_offset_from_bouquet, y_height_from_bottom){ 
+  setInterval(()=>{ 
+    // Chỉ thực hiện nếu là màn hình desktop (rộng hơn 900px)
+    if (window.innerWidth > 900) {
+      // Tính toán lại tọa độ MỖI KHI TẠO HẠT
+      const bouquetLeftPx = bouquet.offsetLeft; // Lấy vị trí % của bó hoa, đổi ra px
+      const spawnX = bouquetLeftPx + x_offset_from_bouquet; // Tọa độ X cuối cùng
+      
+      // canvas.height được cập nhật tự động khi resize (nhờ hàm sizeCanvas)
+      const spawnY = canvas.height - y_height_from_bottom; // Tọa độ Y cuối cùng
+
+      for(let i=0;i<3;i++){ 
+        // Gửi tọa độ "tươi" vừa tính được
+        particles.push(new Particle(spawnX, spawnY)); 
+      } 
+    }
+  }, 200); 
+}
+
+/* ================================================================ */
 
     setTimeout(()=>{ setInterval(()=>{ const n=Math.floor(Math.random()*3)+3; for(let i=0;i<n;i++){ if(fallingPetals.length<25){ setTimeout(()=> fallingPetals.push(new FallingPetal()), i*100); } } },1200); },5000);
 
@@ -761,7 +772,4 @@ audioBtn.addEventListener('click', () => {
     })();
   </script>
 </body>
-
 </html>
-
-
