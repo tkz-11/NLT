@@ -304,6 +304,36 @@
     padding: 6px 10px; /* Thu nhỏ (giá trị gốc là 8px 14px) */
     font-size: 13px;   /* Giảm cỡ chữ 1 chút */
 }
+.message-text {
+    /* Bỏ kẹp dòng (line-clamp) */
+    display: block; /* Ghi đè lên 'display: -webkit-box' */
+    -webkit-line-clamp: unset;
+    -webkit-box-orient: unset;
+    
+    /* Cho phép nó cuộn */
+    overflow-y: auto;
+    
+    /* Đây là mấu chốt: Ra lệnh cho khối lời chúc này
+      "chiếm lấy" toàn bộ không gian trống (thay cho "lò xo")
+    */
+    flex-grow: 1;
+    flex-shrink: 1; /* Cho phép co lại nếu cần */
+    min-height: 50px; /* Đặt một chiều cao tối thiểu */
+}
+
+/* 2. Vô hiệu hóa "lò xo" (div trống) */
+/* Selector này: "chọn div là em của #messageText" */
+#messageText + div {
+    /* Ghi đè lên style "flex: 1" có sẵn trong HTML */
+    flex: none !important; 
+    
+    /* Tạo một khoảng cách nhỏ (ví dụ 20px) thay cho lò xo */
+    height: 20px; 
+}
+
+/* ================================================ */
+/* ===== KẾT THÚC PHẦN THÊM MỚI ===== */
+/* ================================================ */
 .page-right {padding: 8px 20px 15px 20px;}
 
 .wrapper-paper {
